@@ -1,5 +1,7 @@
 /* Post.css */
 .post-card {
+  width: 70%;
+  margin: 0 auto 0 auto;
   background-color: #ffffff;
   border-radius: 10px;
   overflow: hidden;

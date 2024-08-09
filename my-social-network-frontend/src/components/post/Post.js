@@ -1,10 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../styles/Post.css";
 import Comment from "../Comment";
+import createComment from "../../actions/commentAction";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
-const Post = ({ post }) => {
+const Post = ({ post, comment, username, createComment }) => {
   const [showForm, setShowForm] = useState(false);
   const [newComment, setNewComment] = useState("");
+
+  useEffect(() => {
+    if (comment && comment.postPublicId === post.publicId) {
+      post.comments.push(comment);
+    }
+  }, [comment]);
 
   function timeAgo(dateString) {
     const now = new Date();
@@ -36,10 +45,21 @@ const Post = ({ post }) => {
 
   const handleCommentSubmit = (e) => {
     e.preventDefault();
-    // Logic để gửi comment mới lên server
-    console.log("New Comment Submitted:", newComment);
+    if (!newComment) {
+      return;
+    }
+    let commentObject = {
+      content: newComment,
+      isDeleted: false,
+    };
+    createComment(post.publicId, username, commentObject);
+    post.comments.push(comment);
     // Reset form sau khi gửi
     setNewComment("");
+  };
+
+  const handleInputChange = (e) => {
+    setNewComment(e.target.value);
   };
 
   return (
@@ -99,8 +119,11 @@ const Post = ({ post }) => {
         </button>
       </div>
       <div className="comment-list">
-        {post.comments.slice(0, 3).map((comment) => (
-          <Comment key={comment.id} comment={comment} />
+        {post.comments.map((comment, index) => (
+          <Comment
+            key={comment.id ? comment.id : `${index}-${comment.postPublicId}`}
+            comment={comment}
+          />
         ))}
       </div>
       {showForm && (
@@ -108,7 +131,7 @@ const Post = ({ post }) => {
           <form onSubmit={handleCommentSubmit}>
             <textarea
               value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
+              onChange={handleInputChange}
               placeholder="Write a comment..."
               rows="3"
             />
@@ -122,4 +145,15 @@ const Post = ({ post }) => {
   );
 };
 
-export default Post;
+Post.propTypes = {
+  createComment: PropTypes.func.isRequired,
+  post: PropTypes.object.isRequired,
+};
+const mapDispatchToProps = {
+  createComment,
+};
+const mapStateToProps = (state) => ({
+  comment: state.comment.comment,
+  username: state.auth.user.sub,
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Post);
