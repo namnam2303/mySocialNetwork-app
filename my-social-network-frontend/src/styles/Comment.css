@@ -1,0 +1,36 @@
+.media {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+  
+  .media-left {
+    margin-right: 20px;
+  }
+  
+  .media-object {
+    border-radius: 50%;
+    width: 50px; /* Adjust size as needed */
+    height: 50px;
+  }
+  
+  .media-body {
+    flex: 1;
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 10px;
+  }
+  
+  .chat-header {
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-size: 1rem;
+  }
+  
+  .text-muted {
+    color: #6c757d;
+  }
+  
+  p.text-muted {
+    margin: 0;
+  }
+  

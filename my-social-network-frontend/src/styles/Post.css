@@ -1,0 +1,170 @@
+/* Post.css */
+.post-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  transition: box-shadow 0.3s ease;
+}
+
+.post-card:hover {
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+}
+
+.post-card img {
+  max-width: 100%;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.card-block {
+  padding: 15px;
+}
+
+.chat-header {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.social-time {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 15px;
+}
+
+.timeline-details p {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.5;
+}
+
+.social-msg a {
+  color: #007bff;
+  margin-right: 15px;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.social-msg a:hover {
+  text-decoration: underline;
+}
+
+.social-msg i {
+  margin-right: 5px;
+}
+
+.post-image-wrapper {
+  margin: 0;
+  padding: 0;
+}
+
+.post-image-wrapper img {
+  margin-bottom: 5rem;
+  border-bottom: 1px solid #ddd;
+}
+
+
+/* Container cho nút like và các biểu tượng cảm xúc */
+/* Container cho nút like và các biểu tượng cảm xúc */
+.like-container {
+  position: relative;
+  display: inline-block;
+}
+
+/* Các biểu tượng cảm xúc ẩn ban đầu */
+.like-options {
+  display: flex;
+  position: absolute;
+  bottom: 100%; /* Hiển thị phía trên nút Like */
+  left: 160%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  padding: 5px 10px;
+  border-radius: 50px;
+  z-index: 1;
+  visibility: hidden; /* Ẩn các biểu tượng */
+  opacity: 0;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Hiển thị các biểu tượng cảm xúc khi hover vào nút Like */
+.like-container:hover .like-options {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Mỗi biểu tượng cảm xúc */
+.like-options i {
+  font-size: 1.8rem;
+  color: #666;
+  margin: 0 5px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.like-options i:hover {
+  transform: scale(1.3);
+}
+
+/* Nút like chính */
+.like-main {
+  font-size: 1.5rem;
+  color: #007bff;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+}
+
+/* Hiệu ứng khi hover vào nút like chính */
+.like-main:hover {
+  color: #0056b3;
+}
+
+/* Thêm màu sắc cho các biểu tượng cảm xúc */
+.like-options .fa-thumbs-up {
+  color: #3b5998; /* Màu xanh cho nút Like */
+}
+
+.like-options .fa-heart {
+  color: #e74c3c; /* Màu đỏ cho biểu tượng Love */
+}
+
+.like-options .fa-laugh {
+  color: #f1c40f; /* Màu vàng cho biểu tượng Haha */
+}
+
+.like-options .fa-sad-tear {
+  color: #3498db; /* Màu xanh lam cho biểu tượng Sad */
+}
+
+.like-options .fa-angry {
+  color: #e74c3c; /* Màu đỏ đậm cho biểu tượng Angry */
+}
+
+
+/* Css comment form*/
+.comment-form {
+  margin-top: 10px;
+}
+
+.comment-form textarea {
+  width: 100%;
+  border-radius: 5px;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+.comment-form button {
+  margin-top: 10px;
+  padding: 10px 20px;
+}
+
+.comment-button{
+  background-color: white;
+}
+.comment-button span{
+  color: #2092de;
+}

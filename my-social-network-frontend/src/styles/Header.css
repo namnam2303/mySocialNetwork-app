@@ -1,0 +1,16 @@
+/* Header.css */
+.navbar-brand img {
+    height: 40px;
+  }
+  
+  .navbar-nav .nav-link {
+    margin-left: 15px;
+  }
+  
+  @media (max-width: 767px) {
+    .navbar-nav .nav-link {
+      margin-left: 0;
+      margin-top: 10px;
+    }
+  }
+  
