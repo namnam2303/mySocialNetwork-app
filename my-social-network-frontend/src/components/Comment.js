@@ -6,13 +6,13 @@ const Comment = ({ comment }) => {
       <a className="media-left" href="#">
         <img
           className="media-object img-radius m-r-20"
-          src={comment.userAvatar}
+          src={comment.user.avatar.substring(7)}
           alt="User avatar"
         />
       </a>
       <div className="media-body b-b-muted social-client-description">
         <div className="chat-header">
-          {comment.userName}
+          {comment.user.fullName}
           <span className="text-muted">
             {" "}
             {new Date(comment.createdAt).toLocaleDateString()}

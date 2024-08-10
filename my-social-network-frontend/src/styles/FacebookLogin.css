@@ -1,0 +1,122 @@
+
+.facebook-login {
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Helvetica, Arial, sans-serif;
+  }
+  
+  .facebook-login__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 980px;
+    width: 100%;
+  }
+  
+  .facebook-login__left {
+    width: 580px;
+    padding-right: 32px;
+  }
+  
+  .facebook-login__logo {
+    width: 300px;
+    margin-bottom: 10px;
+  }
+  
+  .facebook-login__tagline {
+    font-size: 28px;
+    font-weight: normal;
+    line-height: 32px;
+    width: 500px;
+  }
+  
+  .facebook-login__right {
+    text-align: center;
+  }
+  
+  .facebook-login__form {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
+    padding: 20px;
+    width: 396px;
+  }
+  
+  .facebook-login__form .form-control {
+    font-size: 17px;
+    padding: 14px 16px;
+    width: 100%;
+    border: 1px solid #dddfe2;
+    border-radius: 6px;
+    margin-bottom: 12px;
+  }
+  
+  .facebook-login__form .form-control:focus {
+    border-color: #1877f2;
+    box-shadow: 0 0 0 2px #e7f3ff;
+  }
+  
+  .facebook-login__submit {
+    background-color: #1877f2;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 14px 16px;
+    width: 100%;
+    margin-bottom: 16px;
+  }
+  
+  .facebook-login__submit:hover {
+    background-color: #166fe5;
+  }
+  
+  .facebook-login__forgot {
+    margin-bottom: 20px;
+  }
+  
+  .facebook-login__forgot button {
+    color: #1877f2;
+    font-size: 14px;
+    text-decoration: none;
+  }
+  
+  .facebook-login__divider {
+    border-bottom: 1px solid #dadde1;
+    margin: 20px 0;
+  }
+  
+  .facebook-login__create-account {
+    background-color: #42b72a;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 17px;
+    font-weight: bold;
+    padding: 14px 16px;
+    margin-top: 6px;
+  }
+  
+  .facebook-login__create-account:hover {
+    background-color: #36a420;
+  }
+  
+  .facebook-login__create-page {
+    color: #1c1e21;
+    font-size: 14px;
+    margin-top: 28px;
+  }
+  
+  .facebook-login__create-page strong {
+    color: #1c1e21;
+    cursor: pointer;
+  }
+  
+  .facebook-login__create-page strong:hover {
+    text-decoration: underline;
+  }
+  

@@ -8,6 +8,7 @@ import PropTypes from "prop-types";
 const Post = ({ post, comment, username, createComment }) => {
   const [showForm, setShowForm] = useState(false);
   const [newComment, setNewComment] = useState("");
+  const [showAllComments, setShowAllComments] = useState(false);
 
   useEffect(() => {
     if (comment && comment.postPublicId === post.publicId) {
@@ -34,6 +35,8 @@ const Post = ({ post, comment, username, createComment }) => {
       return `${diffInHours} hour${diffInHours !== 1 ? "s" : ""} ago`;
     } else if (diffInDays < 7) {
       return `${diffInDays} day${diffInDays !== 1 ? "s" : ""} ago`;
+    } else if (diffInWeeks < 4) {
+      return `${diffInWeeks} week${diffInWeeks !== 1 ? "s" : ""} ago`;
     } else {
       return postDate.toLocaleDateString(); // Hiển thị ngày tháng năm nếu trước lâu hơn 1 tuần
     }
@@ -54,48 +57,36 @@ const Post = ({ post, comment, username, createComment }) => {
     };
     createComment(post.publicId, username, commentObject);
     post.comments.push(comment);
-    // Reset form sau khi gửi
     setNewComment("");
+    setShowForm(false);
   };
 
-  const handleInputChange = (e) => {
-    setNewComment(e.target.value);
+  const toggleComments = () => {
+    setShowAllComments(!showAllComments);
   };
+
+  const displayedComments = showAllComments
+    ? post.comments
+    : post.comments.slice(-1);
 
   return (
-    <div className="post-card card">
+    <div className="post-card">
       <div className="card-block post-timelines">
-        <span
-          className="dropdown-toggle addon-btn text-muted f-right service-btn"
-          data-toggle="dropdown"
-        ></span>
-        <div className="chat-header f-w-600">{post.user.fullName}</div>
-        <div className="social-time text-muted">{timeAgo(post.createdAt)}</div>
+        <div className="chat-header">{post.user.fullName}</div>
+        <div className="social-time">{timeAgo(post.createdAt)}</div>
       </div>
       {post.imageUrl && (
         <div className="post-image-wrapper">
-          <img
-            src={post.imageUrl.substring(7)}
-            className="img-fluid"
-            style={{
-              width: "100%",
-              maxHeight: "25rem",
-              objectFit: "contain",
-              margin: "0",
-              padding: "0",
-              display: "block",
-            }}
-            alt="Post"
-          />
+          <img src={post.imageUrl.substring(7)} alt="Post" />
         </div>
       )}
 
       <div className="card-block">
         <div className="timeline-details">
-          <p className="text-muted">{post.content}</p>
+          <p>{post.content}</p>
         </div>
       </div>
-      <div className="card-block b-b-theme b-t-theme social-msg">
+      <div className="social-msg">
         <div className="like-container">
           <div className="like-options">
             <i className="fa fa-thumbs-up" title="Like"></i>
@@ -104,43 +95,40 @@ const Post = ({ post, comment, username, createComment }) => {
             <i className="fa fa-sad-tear" title="Sad"></i>
             <i className="fa fa-angry" title="Angry"></i>
           </div>
-          <a href="#">
-            <i className="fa fa-thumbs-up like-main"></i>(
-            {post.reactions.length})
-          </a>
+          <button className="like-main">
+            <i className="fa fa-thumbs-up"></i>
+            Like ({post.reactions.length})
+          </button>
         </div>
-        <button
-          type="button"
-          className="comment-button"
-          onClick={handleCommentClick}
-        >
-          <i className="icofont icofont-comment text-muted"></i>
-          <span className="b-r-muted">Comments ({post.comments.length})</span>
+        <button className="comment-button" onClick={handleCommentClick}>
+          <i className="fa fa-comment"></i>
+          Comment ({post.comments.length})
         </button>
       </div>
+      {post.comments.length > 1 && (
+        <button className="view-comments-button" onClick={toggleComments}>
+          {showAllComments ? "Ẩn bình luận" : "Xem các bình luận trước"}
+        </button>
+      )}
       <div className="comment-list">
-        {post.comments.map((comment, index) => (
+        {displayedComments.map((comment, index) => (
           <Comment
             key={comment.id ? comment.id : `${index}-${comment.postPublicId}`}
             comment={comment}
           />
         ))}
       </div>
-      {showForm && (
-        <div className="comment-form">
-          <form onSubmit={handleCommentSubmit}>
-            <textarea
-              value={newComment}
-              onChange={handleInputChange}
-              placeholder="Write a comment..."
-              rows="3"
-            />
-            <button type="submit" className="btn btn-primary">
-              Submit
-            </button>
-          </form>
-        </div>
-      )}
+      <div className={`comment-form ${showForm ? "show" : ""}`}>
+        <form onSubmit={handleCommentSubmit}>
+          <textarea
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            placeholder="Write a comment..."
+            rows="3"
+          />
+          <button type="submit">Comment</button>
+        </form>
+      </div>
     </div>
   );
 };

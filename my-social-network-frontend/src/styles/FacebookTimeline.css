@@ -1,0 +1,58 @@
+/* styles/FacebookTimeline.css */
+
+.facebook-timeline {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f0f2f5;
+    font-family: Helvetica, Arial, sans-serif;
+  }
+  
+  .post-creator {
+    background-color: white;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+  }
+  
+  .post-creator input {
+    flex-grow: 1;
+    border: none;
+    background-color: #f0f2f5;
+    border-radius: 20px;
+    padding: 10px 12px;
+    margin-left: 10px;
+    font-size: 15px;
+  }
+  
+  .post-creator button {
+    background-color: #1877f2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  
+  .no-posts {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    color: #65676b;
+    font-size: 15px;
+  }
+  
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  /* Các styles khác cho Post component sẽ được định nghĩa trong file CSS riêng của Post */
