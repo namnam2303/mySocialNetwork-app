@@ -8,6 +8,7 @@ export const loginUser = (userData, navigate) => async (dispatch) => {
     // Xóa lỗi trước khi gửi yêu cầu
     dispatch(clearErrors());
     const res = await axios.post("/api/auth/login", userData);
+    console.log("login");
     const { token, user } = res.data;
     // Lưu token vào localStorage
     localStorage.setItem("jwtToken", token);
@@ -49,10 +50,9 @@ export const registerUser = (userData, navigate) => async (dispatch) => {
   try {
     // Clear previous errors
     dispatch(clearErrors());
-    console.log(userData);
+    console.log("register" + userData);
     // Send registration data to the backend
     await axios.post("/api/auth/register", userData);
-
     // Redirect to login form
     navigate("/login");
   } catch (err) {

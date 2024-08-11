@@ -86,14 +86,14 @@
 }
 
 .like-options i {
-  font-size: 22px;
+  font-size: 1.8rem;
   margin: 0 4px;
   cursor: pointer;
   transition: transform 0.2s ease;
 }
 
 .like-options i:hover {
-  transform: scale(1.2);
+  transform: scale(1.3);
 }
 
 .like-main, .comment-button {
@@ -184,3 +184,76 @@
 .comment-list {
   padding: 8px 16px;
 }
+
+
+/* Styles cho tính năng xóa bài đăng */
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.post-options {
+  position: relative;
+}
+
+.options-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  color: #65676B;
+  padding: 0 8px;
+}
+
+.options-dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.options-dropdown button {
+  display: block;
+  width: 100%;
+  padding: 8px 16px;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #050505;
+  font-size: 14px;
+}
+
+.options-dropdown button:hover {
+  background-color: #F2F2F2;
+}
+.post-timelines {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+}
+
+.post-options {
+  margin-left: auto;
+}
+
+.like-options i:hover {
+  opacity: 0.8;
+  transform: scale(1.2);
+  transition: all 0.2s ease;
+}
+
+.like-options i.fa-thumbs-up:hover { color: #2078F4; }
+.like-options i.fa-heart:hover { color: #F33E58; }
+.like-options i.fa-laugh:hover, .like-options i.fa-sad-tear:hover { color: #F7B125; }
+.like-options i.fa-angry:hover { color: #E9710F; }

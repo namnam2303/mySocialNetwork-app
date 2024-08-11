@@ -25,12 +25,8 @@
     margin-bottom: 5px;
     font-size: 1rem;
   }
-  
-  .text-muted {
-    color: #6c757d;
+
+  .text-muted{
+    display: inline;
+    margin-left: 1rem;
   }
-  
-  p.text-muted {
-    margin: 0;
-  }
-  

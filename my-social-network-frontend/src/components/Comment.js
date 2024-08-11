@@ -3,7 +3,7 @@ import "../styles/Comment.css";
 const Comment = ({ comment }) => {
   return (
     <div className="media m-b-20">
-      <a className="media-left" href="#">
+      <a className="media-left" href={"/api/user/" + comment.user.username}>
         <img
           className="media-object img-radius m-r-20"
           src={comment.user.avatar.substring(7)}
@@ -18,7 +18,7 @@ const Comment = ({ comment }) => {
             {new Date(comment.createdAt).toLocaleDateString()}
           </span>
         </div>
-        <p className="text-muted">{comment.content}</p>
+        <p className="text-coment">{comment.content}</p>
       </div>
     </div>
   );

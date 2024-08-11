@@ -2,11 +2,15 @@
 
 import axios from "axios";
 import { GET_USER_INFO, GET_ERRORS, GET_POSTS } from "./type";
-
+import setAuthToken from "../utils/setAuthToken";
 // Action to get user info
 export const getUserInfo = (username) => async (dispatch) => {
   try {
-    const res = await axios.get(`/api/users/${username}`);
+    console.log("get user infor action");
+    if (localStorage.jwtToken) {
+      setAuthToken(localStorage.jwtToken);
+    }
+    const res = await axios.get(`/api/user/${username}`);
     dispatch({
       type: GET_USER_INFO,
       payload: res.data, // Cập nhật state với thông tin người dùng

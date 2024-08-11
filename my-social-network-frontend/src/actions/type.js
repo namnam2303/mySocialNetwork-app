@@ -7,4 +7,5 @@ export const DELETE_POST = "DELETE_POST";
 export const GET_USER_INFO = "GET_USER_INFO";
 export const GET_TIMELINE = "GET_TIMELINE";
 export const CREATE_COMMENT = "CREATE_COMMENT";
+export const CREATE_POST = "CREATE_POST";
 // Add other action types as needed

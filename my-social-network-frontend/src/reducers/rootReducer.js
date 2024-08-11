@@ -3,6 +3,7 @@ import authReducer from "./authReducer";
 import errorReducer from "./errorReducer";
 import postReducer from "./postReducer";
 import { commentReducer } from "./commentReducer";
+import userReducer from "./userReducer";
 // Import other reducers as needed
 
 const rootReducer = combineReducers({
@@ -10,6 +11,7 @@ const rootReducer = combineReducers({
   errors: errorReducer,
   posts: postReducer,
   comment: commentReducer,
+  user: userReducer,
   // Add other reducers here
 });
 
