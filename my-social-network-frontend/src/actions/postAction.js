@@ -1,3 +1,4 @@
+import setAuthToken from "../utils/setAuthToken";
 import { GET_ERRORS, GET_POSTS } from "./type";
 import axios from "axios";
 
@@ -40,6 +41,9 @@ export const createPost = (username, content, image) => async (dispatch) => {
 export const deletePost = (publicId) => async (dispatch) => {
   try {
     console.log("delete post with id " + publicId);
+    if (localStorage.jwtToken) {
+      setAuthToken(localStorage.jwtToken);
+    }
     await axios.delete(`api/post/${publicId}`);
   } catch (error) {
     const errors =

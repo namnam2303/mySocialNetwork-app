@@ -1,8 +1,9 @@
 // reducers/userReducer.js
 
-import { GET_USER_INFO } from "../actions/type";
+import { GET_USER_INFO, GET_USER_POSTS } from "../actions/type";
 const initialState = {
   userInfo: {},
+  userPosts: [],
 };
 
 export default function (state = initialState, action) {
@@ -11,6 +12,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         userInfo: action.payload,
+      };
+    case GET_USER_POSTS:
+      return {
+        ...state,
+        userPosts: action.payload,
       };
     default:
       return state;

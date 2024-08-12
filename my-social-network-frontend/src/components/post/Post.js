@@ -31,7 +31,7 @@ const Post = ({
     const postDate = new Date(dateString);
     const diffInMs = now - postDate;
 
-    const diffInSeconds = Math.floor(diffInMs / 1000);
+    const diffInSeconds = Math.floor(diffInMs / 1000 + 2);
     const diffInMinutes = Math.floor(diffInSeconds / 60);
     const diffInHours = Math.floor(diffInMinutes / 60);
     const diffInDays = Math.floor(diffInHours / 24);

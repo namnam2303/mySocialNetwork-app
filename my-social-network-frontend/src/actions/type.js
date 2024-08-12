@@ -8,4 +8,6 @@ export const GET_USER_INFO = "GET_USER_INFO";
 export const GET_TIMELINE = "GET_TIMELINE";
 export const CREATE_COMMENT = "CREATE_COMMENT";
 export const CREATE_POST = "CREATE_POST";
+export const CLEAR_AUTH_STATE = "CLEAR_AUTH_STATE";
+export const GET_USER_POSTS = "GET_USER_POSTS";
 // Add other action types as needed

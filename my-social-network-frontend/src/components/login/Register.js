@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Form, Button, Alert } from "react-bootstrap";
 import { registerUser } from "../../actions/authAction";
 import "../../styles/Register.css";
-import BackgroundImage from "../../assets/images/background.png";
 import Logo from "../../assets/images/logo.png";
 
 const Register = () => {
@@ -13,6 +12,8 @@ const Register = () => {
   const [inputFullname, setInputFullname] = useState("");
   const [inputBirthday, setInputBirthday] = useState("");
   const [inputEmail, setInputEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [show, setShow] = useState(false);
 
   // Get errors from Redux store
   const usernameError = useSelector((state) => state.errors.username);
@@ -21,16 +22,20 @@ const Register = () => {
   const fullNameError = useSelector((state) => state.errors.fullName);
   const birthDateError = useSelector((state) => state.errors.birthDate);
 
-  const [show, setShow] = useState(false);
-  const [loading, setLoading] = useState(false);
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const authError = useSelector((state) => state.errors);
 
+  useEffect(() => {
+    if (authError && Object.keys(authError).length > 0) {
+      setShow(true);
+    }
+  }, [authError]);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
+    setShow(false);
 
     const userData = {
       username: inputUsername,
@@ -40,124 +45,115 @@ const Register = () => {
       email: inputEmail,
     };
 
-    dispatch(registerUser(userData, navigate)).then(() => {
+    try {
+      await dispatch(registerUser(userData, navigate));
+      // If successful, it will redirect to login page
+    } catch (error) {
+      console.error("Registration failed:", error);
+    } finally {
       setLoading(false);
-      if (authError.message) {
-        setShow(true);
-      } else {
-        setShow(false);
-      }
-    });
+    }
   };
 
   return (
-    <div
-      className="sign-in__wrapper"
-      style={{ backgroundImage: `url(${BackgroundImage})` }}
-    >
-      {/* Overlay */}
-      <div className="sign-in__backdrop"></div>
-      {/* Form */}
-      <Form className="shadow p-4 bg-white rounded" onSubmit={handleSubmit}>
-        {/* Header */}
-        <img
-          className="img-thumbnail mx-auto d-block mb-2"
-          src={Logo}
-          alt="logo"
-        />
-        <div className="h4 mb-2 text-center">Register</div>
-        {/* Alert */}
-        {show && authError.message ? (
-          <Alert
-            className="mb-2"
-            variant="danger"
-            onClose={() => setShow(false)}
-            dismissible
-          >
-            {authError.message}
-          </Alert>
-        ) : (
-          <div />
-        )}
-        <Form.Group className="mb-2" controlId="fullname">
-          <Form.Label>Full Name</Form.Label>
-          <Form.Control
-            type="text"
-            value={inputFullname}
-            onChange={(e) => setInputFullname(e.target.value)}
-            required
-            isInvalid={!!fullNameError}
-          />
-          <Form.Control.Feedback type="invalid">
-            {fullNameError}
-          </Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group className="mb-2" controlId="birthday">
-          <Form.Label>Birthday</Form.Label>
-          <Form.Control
-            type="date"
-            value={inputBirthday}
-            onChange={(e) => setInputBirthday(e.target.value)}
-            required
-            isInvalid={!!birthDateError}
-          />
-          <Form.Control.Feedback type="invalid">
-            {birthDateError}
-          </Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group className="mb-2" controlId="email">
-          <Form.Label>Email</Form.Label>
-          <Form.Control
-            type="email"
-            value={inputEmail}
-            onChange={(e) => setInputEmail(e.target.value)}
-            required
-            isInvalid={!!emailError}
-          />
-          <Form.Control.Feedback type="invalid">
-            {emailError}
-          </Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group className="mb-2" controlId="username">
-          <Form.Label>Username</Form.Label>
-          <Form.Control
-            type="text"
-            value={inputUsername}
-            onChange={(e) => setInputUsername(e.target.value)}
-            required
-            isInvalid={!!usernameError}
-          />
-          <Form.Control.Feedback type="invalid">
-            {usernameError}
-          </Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group className="mb-2" controlId="password">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            value={inputPassword}
-            onChange={(e) => setInputPassword(e.target.value)}
-            required
-            isInvalid={!!passwordError}
-          />
-          <Form.Control.Feedback type="invalid">
-            {passwordError}
-          </Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group className="mb-2" controlId="checkbox">
-          <Form.Check type="checkbox" label="Remember me" />
-        </Form.Group>
-        {!loading ? (
-          <Button className="w-100" variant="primary" type="submit">
-            Register
-          </Button>
-        ) : (
-          <Button className="w-100" variant="primary" type="submit" disabled>
-            Registering...
-          </Button>
-        )}
-      </Form>
-      {/* Footer */}
+    <div className="facebook-register">
+      <div className="facebook-register__container">
+        <div className="facebook-register__left">
+          <img src={Logo} alt="Facebook" className="facebook-register__logo" />
+          <h2 className="facebook-register__tagline">Create a new account</h2>
+          <p>It's quick and easy.</p>
+        </div>
+        <div className="facebook-register__right">
+          <Form className="facebook-register__form" onSubmit={handleSubmit}>
+            {show && authError.message && (
+              <Alert
+                variant="danger"
+                onClose={() => setShow(false)}
+                dismissible
+              >
+                {authError.message}
+              </Alert>
+            )}
+            <Form.Group className="mb-3" controlId="fullname">
+              <Form.Control
+                type="text"
+                placeholder="Full Name"
+                value={inputFullname}
+                onChange={(e) => setInputFullname(e.target.value)}
+                isInvalid={!!fullNameError}
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {fullNameError}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="email">
+              <Form.Control
+                type="email"
+                placeholder="Email address"
+                value={inputEmail}
+                onChange={(e) => setInputEmail(e.target.value)}
+                isInvalid={!!emailError}
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {emailError}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="username">
+              <Form.Control
+                type="text"
+                placeholder="Username"
+                value={inputUsername}
+                onChange={(e) => setInputUsername(e.target.value)}
+                isInvalid={!!usernameError}
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {usernameError}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="password">
+              <Form.Control
+                type="password"
+                placeholder="New password"
+                value={inputPassword}
+                onChange={(e) => setInputPassword(e.target.value)}
+                isInvalid={!!passwordError}
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {passwordError}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="birthday">
+              <Form.Control
+                type="date"
+                placeholder="Birthday"
+                value={inputBirthday}
+                onChange={(e) => setInputBirthday(e.target.value)}
+                isInvalid={!!birthDateError}
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {birthDateError}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Button
+              className="facebook-register__submit"
+              type="submit"
+              disabled={loading}
+            >
+              {loading ? "Registering..." : "Sign Up"}
+            </Button>
+            <div className="facebook-register__login">
+              <Button variant="link" onClick={() => navigate("/login")}>
+                Already have an account?
+              </Button>
+            </div>
+          </Form>
+        </div>
+      </div>
     </div>
   );
 };

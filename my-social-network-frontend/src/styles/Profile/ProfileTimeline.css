@@ -1,0 +1,129 @@
+/* styles/FacebookTimeline.css */
+
+.facebook-timeline {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f0f2f5;
+    font-family: Helvetica, Arial, sans-serif;
+    margin-top: 2.5rem; /* Thêm margin-top để tạo khoảng cách với Header */
+  }
+  
+  .post-creator {
+    background-color: white;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    display: flex;
+  }
+  
+  .post-creator .user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .post-creator form {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+  }
+  
+  .post-creator textarea {
+    flex-grow: 5;
+    width: 60%;
+    display: inline;
+    border: none;
+    background-color: #F0F2F5;
+    border-radius: 20px;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    font-size: 15px;
+    resize: none;
+    min-height: 50px;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-left: 0;
+  }
+  
+  .post-creator button {
+    align-self: flex-end;
+    background-color: #1877F2;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: inline;
+    white-space: nowrap;
+    margin-bottom: 6px;
+    margin-left: 10px;
+  }
+  
+  .post-creator button:hover {
+    background-color: #166FE5;
+  }
+  
+  .post-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .image-upload-label {
+    cursor: pointer;
+    color: #1877f2;
+    font-weight: bold;
+  }
+  
+  .fa-image {
+    font-size: 30px; /* Tăng kích thước icon */
+  }
+  
+  .image-preview {
+    margin-top: 10px;
+    position: relative;
+  }
+  
+  .image-preview img {
+    max-width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+  }
+  
+  .image-preview button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .no-posts {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    color: #65676b;
+    font-size: 15px;
+  }
+  
+  /* Đảm bảo Header luôn ở trên cùng */
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }

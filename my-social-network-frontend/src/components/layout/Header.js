@@ -1,52 +1,94 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { Navbar, Nav, Container, Button } from "react-bootstrap";
-import "../../styles/Header.css"; // You can add custom styles here if needed
+import { Link, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../../actions/authAction";
+import {
+  FaHome,
+  FaUser,
+  FaUserFriends,
+  FaBell,
+  FaFacebookMessenger,
+} from "react-icons/fa";
+import "../../styles/Header.css";
 
 const Header = () => {
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const user = useSelector((state) => state.user.userInfo);
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+  };
+
+  const isActive = (path) => location.pathname === path;
 
   return (
-    <Navbar bg="primary" variant="dark" expand="lg" className="shadow">
-      <Container>
-        <Navbar.Brand as={Link} to="/">
-          <img
-            src="https://via.placeholder.com/150x50" // Replace with your logo source
-            alt="Logo"
-            className="d-inline-block align-top"
-          />
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ml-auto">
-            {isAuthenticated ? (
-              <>
-                <Nav.Link as={Link} to="/profile" className="text-white">
-                  Hello, {user?.username}
-                </Nav.Link>
-                <Button
-                  variant="outline-light"
-                  onClick={() => console.log("Logout")}
-                >
-                  Logout
-                </Button>
-              </>
-            ) : (
-              <>
-                <Nav.Link as={Link} to="/login" className="text-white">
-                  Login
-                </Nav.Link>
-                <Nav.Link as={Link} to="/register" className="text-white">
-                  Register
-                </Nav.Link>
-              </>
-            )}
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+    <header className="header">
+      <div className="header__container">
+        <Link to="/home" className="header__logo">
+          f
+        </Link>
+        <nav className="header__nav">
+          <Link
+            to="/home"
+            className={`header__nav-item ${
+              isActive("/home") ? "header__nav-item--active" : ""
+            }`}
+          >
+            <FaHome className="header__nav-icon" />
+          </Link>
+          <Link
+            to="/profile"
+            className={`header__nav-item ${
+              isActive("/profile") ? "header__nav-item--active" : ""
+            }`}
+          >
+            <FaUser className="header__nav-icon" />
+          </Link>
+          <Link
+            to="/friends"
+            className={`header__nav-item ${
+              isActive("/friends") ? "header__nav-item--active" : ""
+            }`}
+          >
+            <FaUserFriends className="header__nav-icon" />
+          </Link>
+          <Link
+            to="/notifications"
+            className={`header__nav-item ${
+              isActive("/notifications") ? "header__nav-item--active" : ""
+            }`}
+          >
+            <FaBell className="header__nav-icon" />
+          </Link>
+          <Link
+            to="/messages"
+            className={`header__nav-item ${
+              isActive("/messages") ? "header__nav-item--active" : ""
+            }`}
+          >
+            <FaFacebookMessenger className="header__nav-icon" />
+          </Link>
+        </nav>
+        <div className="header__profile">
+          <Link to="/profile">
+            <img
+              src={
+                user.avatar
+                  ? user.avatar.substring(7)
+                  : "https://via.placeholder.com/40"
+              }
+              alt="Profile"
+              className="header__profile-img"
+            />
+          </Link>
+
+          <button onClick={handleLogout} className="header__logout">
+            Logout
+          </button>
+        </div>
+      </div>
+    </header>
   );
 };
 

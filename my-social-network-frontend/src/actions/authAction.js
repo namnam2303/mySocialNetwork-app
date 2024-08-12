@@ -1,5 +1,10 @@
 import axios from "axios";
-import { GET_ERRORS, SET_CURRENT_USER, CLEAR_ERRORS } from "./type";
+import {
+  GET_ERRORS,
+  SET_CURRENT_USER,
+  CLEAR_ERRORS,
+  CLEAR_AUTH_STATE,
+} from "./type";
 import setAuthToken from "../utils/setAuthToken";
 import { jwtDecode as jwt_decode } from "jwt-decode";
 // Đăng nhập - Lấy JWT token
@@ -64,16 +69,45 @@ export const registerUser = (userData, navigate) => async (dispatch) => {
 };
 
 export const logoutUser = () => (dispatch) => {
-  // Xóa token khỏi localStorage
+  // Remove token from localStorage
   localStorage.removeItem("jwtToken");
-  // Xóa tiêu đề Authorization của Axios
+  // Remove auth header for future requests
   setAuthToken(false);
-  // Xóa user hiện tại khỏi state
-  dispatch(setCurrentUser({}));
-
-  // Hủy bỏ tất cả các Interceptor của Axios
+  // Clear the current user and set isAuthenticated to false
+  dispatch({ type: CLEAR_AUTH_STATE });
+  // Reset Axios interceptors
   axios.interceptors.response.handlers = [];
+};
+// ... Các action hiện có ...
 
-  // Điều hướng đến trang đăng nhập
-  window.location.href = "/login";
+// Request Password Reset
+export const requestPasswordReset = (email) => (dispatch) => {
+  return axios
+    .post("/api/password-reset/request", { email })
+    .then((res) => {
+      return Promise.resolve(res.data);
+    })
+    .catch((err) => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data,
+      });
+      return Promise.reject(err.response.data);
+    });
+};
+
+// Reset Password
+export const resetPassword = (token, newPassword) => (dispatch) => {
+  return axios
+    .post("/api/password-reset/reset", { token, password: newPassword })
+    .then((res) => {
+      return Promise.resolve(res.data);
+    })
+    .catch((err) => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data,
+      });
+      return Promise.reject(err.response.data);
+    });
 };

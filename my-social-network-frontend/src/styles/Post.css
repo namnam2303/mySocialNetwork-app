@@ -132,6 +132,7 @@
 }
 
 .comment-form textarea {
+  box-sizing: border-box;
   width: 100%;
   border: none;
   background-color: #F0F2F5;

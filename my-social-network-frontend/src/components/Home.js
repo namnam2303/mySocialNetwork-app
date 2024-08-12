@@ -1,42 +1,29 @@
-import React from "react";
-import { connect } from "react-redux";
-import Post from "./post/Post";
-import { getTimeline } from "../actions/userAction";
-import { useEffect } from "react";
-import PropTypes from "prop-types";
+import React, { useEffect } from "react";
+import { Outlet } from "react-router-dom";
+import Header from "./layout/Header";
+import { useSelector, useDispatch } from "react-redux";
+import { getUserInfo, getTimeline } from "../actions/userAction";
 
-const Home = ({ user, timelineData, getTimeline }) => {
+const Home = () => {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
+  const auth = useSelector((state) => state.auth);
+
   useEffect(() => {
-    if (user && user.sub) {
-      getTimeline(user.sub);
+    if (auth.isAuthenticated && user.sub) {
+      dispatch(getTimeline(user.sub));
+      dispatch(getUserInfo(user.sub));
     }
-  }, [user, getTimeline]);
+  }, [dispatch, auth.isAuthenticated, user.sub]);
 
   return (
-    <div className="container">
-      <h1>Welcome to MySocialNetwork</h1>
-      {user && <h2>Hello, {user.username}!</h2>}
-
-      <div className="timeline">
-        {timelineData && timelineData.length > 0 ? (
-          timelineData.map((post) => <Post key={post.id} post={post} />)
-        ) : (
-          <p>No posts available.</p>
-        )}
-      </div>
+    <div>
+      <Header />
+      <main className="container mt-4">
+        <Outlet />
+      </main>
     </div>
   );
 };
 
-Home.propTypes = {
-  user: PropTypes.object.isRequired,
-  timelineData: PropTypes.array.isRequired,
-  getTimeline: PropTypes.func.isRequired, // Đảm bảo getTimeline là một hàm và là prop bắt buộc
-};
-
-const mapStateToProps = (state) => ({
-  user: state.auth.user,
-  timelineData: state.posts.posts || [], // Đảm bảo timelineData luôn là một mảng
-});
-
-export default connect(mapStateToProps, { getTimeline })(Home);
+export default Home;
