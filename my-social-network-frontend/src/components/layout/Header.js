@@ -72,7 +72,7 @@ const Header = () => {
           </Link>
         </nav>
         <div className="header__profile">
-          <Link to="/register">
+          <Link to={`/profile/${user.username}`}>
             <img
               src={
                 user.username

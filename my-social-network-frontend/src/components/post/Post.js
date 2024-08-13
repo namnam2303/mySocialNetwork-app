@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../styles/Post.css";
 import Comment from "../Comment";
 import createComment from "../../actions/commentAction";
@@ -6,6 +6,7 @@ import { deletePost } from "../../actions/postAction";
 import { createOrUpdateReaction } from "../../actions/reactionAction";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 const Post = ({
   post,
@@ -23,8 +24,11 @@ const Post = ({
   const [showAllComments, setShowAllComments] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
-  const [comments, setComments] = useState(post.comments || []);
-  const [reactions, setReactions] = useState(post.reactions || []);
+  const [localPost, setLocalPost] = useState(post);
+
+  useEffect(() => {
+    setLocalPost(post);
+  }, [post]);
 
   function timeAgo(dateString) {
     const now = new Date();
@@ -69,7 +73,7 @@ const Post = ({
     };
     try {
       const createdComment = await createComment(
-        post.publicId,
+        localPost.publicId,
         username,
         commentObject
       );
@@ -80,11 +84,14 @@ const Post = ({
         createdAt: createdComment?.createdAt || new Date().toISOString(),
         content: newComment,
       };
-      setComments((prevComments) => [...prevComments, commentWithId]);
+      setLocalPost((prevPost) => ({
+        ...prevPost,
+        comments: [...(prevPost.comments || []), commentWithId],
+      }));
       setNewComment("");
       setShowForm(false);
       if (onCommentAdded) {
-        onCommentAdded(post.publicId, commentWithId);
+        onCommentAdded(localPost.publicId, commentWithId);
       }
     } catch (error) {
       console.error("Failed to create comment:", error);
@@ -97,10 +104,10 @@ const Post = ({
 
   const handleDeletePost = async () => {
     try {
-      await deletePost(post.publicId);
+      await deletePost(localPost.publicId);
       setIsDeleted(true);
       if (onPostDeleted) {
-        onPostDeleted(post.publicId);
+        onPostDeleted(localPost.publicId);
       }
     } catch (error) {
       console.error("Failed to delete post:", error);
@@ -115,31 +122,17 @@ const Post = ({
     try {
       const reactionObject = {
         reactionType: reactionType,
-        createdAt: new Date().toISOString(),
       };
-      const updatedReaction = await createOrUpdateReaction(
-        post.publicId,
+      const updatedPost = await createOrUpdateReaction(
+        localPost.publicId,
         username,
         reactionObject
       );
 
-      setReactions((prevReactions) => {
-        const existingReactionIndex = prevReactions.findIndex(
-          (r) => r.publicId === updatedReaction.publicId
-        );
-        if (existingReactionIndex > -1) {
-          // Nếu reaction đã tồn tại, cập nhật nó
-          const updatedReactions = [...prevReactions];
-          updatedReactions[existingReactionIndex] = updatedReaction;
-          return updatedReactions;
-        } else {
-          // Nếu chưa, thêm reaction mới
-          return [...prevReactions, updatedReaction];
-        }
-      });
+      setLocalPost(updatedPost);
 
       if (onReactionUpdated) {
-        onReactionUpdated(post.publicId, updatedReaction);
+        onReactionUpdated(localPost.publicId, updatedPost);
       }
     } catch (error) {
       console.error("Failed to update reaction:", error);
@@ -147,8 +140,10 @@ const Post = ({
   };
 
   const getUserReaction = () => {
-    // một reaction cho mỗi user trên mỗi post
-    return reactions.length > 0 ? reactions[0].reactionType : null;
+    return (
+      localPost.reactions?.find((r) => r.user?.username === username)
+        ?.reactionType || null
+    );
   };
 
   const getReactionIcon = (type) => {
@@ -169,9 +164,9 @@ const Post = ({
   };
 
   const displayedComments =
-    comments.length > 1 && !showAllComments
-      ? [comments[comments.length - 1]]
-      : comments;
+    localPost.comments && localPost.comments.length > 1 && !showAllComments
+      ? [localPost.comments[localPost.comments.length - 1]]
+      : localPost.comments || [];
 
   if (isDeleted) {
     return null;
@@ -181,10 +176,22 @@ const Post = ({
     <div className="post-card">
       <div className="card-block post-timelines">
         <div className="post-header">
-          <div className="chat-header">{post.user.fullName}</div>
-          <div className="social-time">{timeAgo(post.createdAt)}</div>
+          <div className="image-container">
+            <Link
+              to={`/profile/${localPost.user?.username}`}
+              className="media-left"
+            >
+              <img
+                className="media-object"
+                src={`/user/avatar/${localPost.user?.username}`}
+                alt="User avatar"
+              />
+            </Link>
+          </div>
+          <div className="chat-header">{localPost.user?.fullName}</div>
+          <div className="social-time">{timeAgo(localPost.createdAt)}</div>
         </div>
-        {username === post.user.username && (
+        {username === localPost.user?.username && (
           <div className="post-options">
             <button className="options-button" onClick={toggleOptions}>
               ...
@@ -197,10 +204,10 @@ const Post = ({
           </div>
         )}
       </div>
-      {post.imageUrl && (
+      {localPost.imageUrl && (
         <div className="post-image-wrapper">
           <img
-            src={post.imageUrl ? post.imageUrl.substring(7) : ""}
+            src={localPost.imageUrl ? localPost.imageUrl.substring(7) : ""}
             alt="Post"
           />
         </div>
@@ -208,7 +215,7 @@ const Post = ({
 
       <div className="card-block">
         <div className="timeline-details">
-          <p>{post.content}</p>
+          <p>{localPost.content}</p>
         </div>
       </div>
       <div className="social-msg">
@@ -233,19 +240,19 @@ const Post = ({
               ? getUserReaction().charAt(0) +
                 getUserReaction().slice(1).toLowerCase()
               : "Like"}{" "}
-            ({reactions.length})
+            ({localPost.reactions?.length || 0})
           </button>
         </div>
         <button className="comment-button" onClick={handleCommentClick}>
           <i className="fa fa-comment"></i>
-          Comment ({comments.length})
+          Comment ({localPost.comments?.length || 0})
         </button>
       </div>
-      {comments.length > 1 && (
+      {localPost.comments && localPost.comments.length > 1 && (
         <button className="view-comments-button" onClick={toggleComments}>
           {showAllComments
             ? "Hide comments"
-            : `View ${comments.length - 1} previous comments`}
+            : `View ${localPost.comments.length - 1} previous comments`}
         </button>
       )}
       {displayedComments.length > 0 && (

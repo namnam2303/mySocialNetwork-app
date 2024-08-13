@@ -189,7 +189,6 @@
 
 /* Styles cho tính năng xóa bài đăng */
 .post-header {
-  display: flex;
   justify-content: space-between;
   align-items: center;
 }
@@ -262,7 +261,7 @@
 
 
 .media-object {
-  border-radius: 50%;
-  width: 40px; /* Adjust size as needed */
+  width: 40px;
   height: 40px;
+  border-radius: 50%;
 }
