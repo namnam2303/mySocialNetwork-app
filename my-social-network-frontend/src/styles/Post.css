@@ -258,3 +258,11 @@
 .like-options i.fa-heart:hover { color: #F33E58; }
 .like-options i.fa-laugh:hover, .like-options i.fa-sad-tear:hover { color: #F7B125; }
 .like-options i.fa-angry:hover { color: #E9710F; }
+
+
+
+.media-object {
+  border-radius: 50%;
+  width: 40px; /* Adjust size as needed */
+  height: 40px;
+}

@@ -13,6 +13,8 @@ export const createOrUpdateReaction =
         },
       };
 
+      console.log(reaction.reactionType + " to the post");
+
       const response = await axios.post(
         `/api/reaction/${postPublicId}/${username}`,
         { reactionType: reaction.reactionType },

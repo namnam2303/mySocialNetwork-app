@@ -7,6 +7,10 @@ import ProfileTimeline from "./ProfileTimeline";
 import { getAvatarSrc } from "../../utils/utils";
 import setAuthToken from "../../utils/setAuthToken";
 import axios from "axios";
+import { getListFriend } from "../../actions/friendAction";
+import { connect } from "react-redux";
+import Proptyes from "prop-types";
+import { useDispatch } from "react-redux";
 
 const Profile = () => {
   const { username } = useParams();
@@ -14,7 +18,8 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const currentUser = useSelector((state) => state.user.userInfo);
   const isCurrentUser = currentUser.username === username;
-
+  const dispatch = useDispatch();
+  const friendList = useSelector((state) => state.friend);
   const fetchUserData = useCallback(async () => {
     if (!username || profileUser) return;
 
@@ -25,6 +30,7 @@ const Profile = () => {
         setAuthToken(localStorage.jwtToken);
       }
       const response = await axios.get(`/api/user/${username}`);
+
       setProfileUser(response.data);
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -35,7 +41,10 @@ const Profile = () => {
 
   useEffect(() => {
     fetchUserData();
-  }, [fetchUserData]);
+    if (username) {
+      dispatch(getListFriend(username));
+    }
+  }, [username, fetchUserData]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -60,7 +69,9 @@ const Profile = () => {
         </div>
         <div className="profile-info">
           <h1>{profileUser.name}</h1>
-          <p>{profileUser.friendCount} friends</p>
+          <p className="friend-span">
+            {friendList.length || 0} friend {friendList.length > 1 ? `s` : ``}
+          </p>
           {!isCurrentUser && (
             <div className="profile-actions">
               <button className="btn btn-primary">Add Friend</button>
@@ -81,4 +92,12 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+Profile.propTypes = {
+  getListFriend: Proptyes.func.isRequired,
+};
+
+const mapDispatchToProps = {
+  getListFriend,
+};
+
+export default connect(null, mapDispatchToProps)(Profile);

@@ -45,8 +45,10 @@
   
   .profile-info p {
     color: #65676b;
-    font-size: 14px;
+    font-size: 16px;
     margin-top: 5px;
+    margin-left: 30px;
+    font-weight: bold;
   }
   
   .profile-actions {

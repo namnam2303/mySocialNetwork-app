@@ -44,7 +44,8 @@ export const deletePost = (publicId) => async (dispatch) => {
     if (localStorage.jwtToken) {
       setAuthToken(localStorage.jwtToken);
     }
-    await axios.delete(`api/post/${publicId}`);
+    // Use an absolute path for the API request
+    await axios.delete(`/api/post/${publicId}`);
   } catch (error) {
     const errors =
       error.response && error.response.data

@@ -1,15 +1,16 @@
 import React from "react";
 import "../styles/Comment.css";
+import { Link } from "react-router-dom";
 const Comment = ({ comment }) => {
   return (
     <div className="media m-b-20">
-      <a className="media-left" href={"/api/user/" + comment.user.username}>
+      <Link to={`/profile/${comment.user.username}`} className="media-left">
         <img
           className="media-object img-radius m-r-20"
           src={comment.user.avatar.substring(7)}
           alt="User avatar"
         />
-      </a>
+      </Link>
       <div className="media-body b-b-muted social-client-description">
         <div className="chat-header">
           {comment.user.fullName}

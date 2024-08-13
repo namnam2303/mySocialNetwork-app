@@ -4,6 +4,7 @@ import errorReducer from "./errorReducer";
 import postReducer from "./postReducer";
 import { commentReducer } from "./commentReducer";
 import userReducer from "./userReducer";
+import friendReducer from "./friendReducer";
 // Import other reducers as needed
 
 const rootReducer = combineReducers({
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
   posts: postReducer,
   comment: commentReducer,
   user: userReducer,
+  friend: friendReducer,
   // Add other reducers here
 });
 

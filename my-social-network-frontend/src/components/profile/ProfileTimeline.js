@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { connect, useDispatch } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import Post from "../post/Post";
 import { createPost } from "../../actions/postAction";
@@ -18,6 +18,7 @@ const ProfileTimeline = ({
   const [image, setImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const dispatch = useDispatch();
+  const currentLoginUser = useSelector((state) => state.user.userInfo);
 
   const fetchUserPosts = useCallback(() => {
     if (user && user.username) {
@@ -130,7 +131,7 @@ const ProfileTimeline = ({
         timelineData.map((post) => {
           // Create a copy of the post and modify if necessary
           const modifiedPost = { ...post, comments: post.comments || [] };
-          if (modifiedPost.user.username === user.username) {
+          if (modifiedPost.user.username === currentLoginUser.username) {
             modifiedPost.user = { ...modifiedPost.user, fullName: "You" };
           }
           return (
