@@ -41,10 +41,8 @@ const Profile = () => {
 
   useEffect(() => {
     fetchUserData();
-    if (username) {
-      dispatch(getListFriend(username));
-    }
-  }, [username, fetchUserData]);
+    dispatch(getListFriend(username));
+  }, [username, fetchUserData, dispatch]);
 
   if (loading) {
     return <div>Loading...</div>;

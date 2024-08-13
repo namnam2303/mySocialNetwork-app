@@ -17,7 +17,7 @@ const Timeline = ({ user, timelineData, getTimeline, createComment }) => {
     if (user && user.username) {
       getTimeline(user.username);
     }
-  }, []);
+  }, [getTimeline, user]);
 
   const handleInputChange = (e) => {
     setNewPost(e.target.value);
@@ -124,7 +124,7 @@ const Timeline = ({ user, timelineData, getTimeline, createComment }) => {
           }
           return (
             <Post
-              key={modifiedPost.id}
+              key={modifiedPost.publicId}
               post={modifiedPost}
               onPostDeleted={(deletedPostId) => {
                 getTimeline(user.username);
@@ -148,7 +148,7 @@ Timeline.propTypes = {
 
 const mapStateToProps = (state) => ({
   user: state.user.userInfo,
-  timelineData: state.posts.posts || [],
+  timelineData: state.posts.postList || [],
 });
 
 const mapDispatchToProps = {

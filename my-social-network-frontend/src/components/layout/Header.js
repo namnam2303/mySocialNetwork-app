@@ -10,7 +10,6 @@ import {
   FaFacebookMessenger,
 } from "react-icons/fa";
 import "../../styles/Header.css";
-import Profile from "../profile/Profile";
 
 const Header = () => {
   const dispatch = useDispatch();

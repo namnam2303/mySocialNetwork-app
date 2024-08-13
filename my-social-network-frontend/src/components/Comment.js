@@ -7,7 +7,7 @@ const Comment = ({ comment }) => {
       <Link to={`/profile/${comment.user.username}`} className="media-left">
         <img
           className="media-object img-radius m-r-20"
-          src={comment.user.avatar.substring(7)}
+          src={`/user/avatar/${comment.user.username}`}
           alt="User avatar"
         />
       </Link>

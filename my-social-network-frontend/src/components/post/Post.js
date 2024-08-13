@@ -259,7 +259,7 @@ const Post = ({
         <div className="comment-list">
           {displayedComments.map((comment) => (
             <Comment
-              key={comment.id || `temp-${comment.createdAt}`}
+              key={comment.publicId || `temp-${comment.createdAt}`}
               comment={comment}
             />
           ))}

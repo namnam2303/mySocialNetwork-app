@@ -1,7 +1,7 @@
 import { GET_POSTS, ADD_POST, DELETE_POST } from "../actions/type";
 
 const initialState = {
-  posts: [],
+  postList: [],
 };
 
 export default function (state = initialState, action) {
@@ -9,17 +9,19 @@ export default function (state = initialState, action) {
     case GET_POSTS:
       return {
         ...state,
-        posts: action.payload,
+        postList: action.payload,
       };
     case ADD_POST:
       return {
         ...state,
-        posts: [action.payload, ...state.posts],
+        postList: [action.payload, ...state.posts],
       };
     case DELETE_POST:
       return {
         ...state,
-        posts: state.posts.filter((post) => post.id !== action.payload),
+        postList: state.post.filter(
+          (post) => post.id !== action.payload.publicId
+        ),
       };
     default:
       return state;

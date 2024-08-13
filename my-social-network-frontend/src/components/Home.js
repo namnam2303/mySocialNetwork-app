@@ -13,7 +13,7 @@ const Home = () => {
       dispatch(getTimeline(user.sub));
       dispatch(getUserInfo(user.sub));
     }
-  }, [user.sub]);
+  }, [user.sub, dispatch]);
 
   return (
     <div>
