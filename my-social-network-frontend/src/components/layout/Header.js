@@ -10,6 +10,7 @@ import {
   FaFacebookMessenger,
 } from "react-icons/fa";
 import "../../styles/Header.css";
+import Profile from "../profile/Profile";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -38,7 +39,7 @@ const Header = () => {
             <FaHome className="header__nav-icon" />
           </Link>
           <Link
-            to="/profile"
+            to={`/profile/${user.username}`}
             className={`header__nav-item ${
               isActive("/profile") ? "header__nav-item--active" : ""
             }`}
@@ -71,15 +72,15 @@ const Header = () => {
           </Link>
         </nav>
         <div className="header__profile">
-          <Link to="/profile">
+          <Link to="/register">
             <img
               src={
-                user.avatar
-                  ? user.avatar.substring(7)
+                user.username
+                  ? "/user/avatar/" + user.username
                   : "https://via.placeholder.com/40"
               }
               alt="Profile"
-              className="header__profile-img"
+              className="user-avatar"
             />
           </Link>
 

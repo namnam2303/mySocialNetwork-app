@@ -1,46 +1,80 @@
-import React from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import Intro from "./Intro";
 import "../../styles/Profile/Profile.css";
 import ProfileTimeline from "./ProfileTimeline";
-import { useSelector } from "react-redux";
-import defaultAvatar from "../../assets/images/default.png";
-
-const getAvatarSrc = (username, avatar) => {
-  if (!username || avatar == undefined) {
-    return defaultAvatar;
-  }
-  return "/user/avatar/" + username;
-};
+import { getAvatarSrc } from "../../utils/utils";
+import setAuthToken from "../../utils/setAuthToken";
+import axios from "axios";
 
 const Profile = () => {
-  const user = useSelector((state) => state.user.userInfo);
+  const { username } = useParams();
+  const [profileUser, setProfileUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const currentUser = useSelector((state) => state.user.userInfo);
+  const isCurrentUser = currentUser.username === username;
+
+  const fetchUserData = useCallback(async () => {
+    if (!username || profileUser) return;
+
+    setLoading(true);
+    try {
+      console.log(`Fetching user data for ${username}`);
+      if (localStorage.jwtToken) {
+        setAuthToken(localStorage.jwtToken);
+      }
+      const response = await axios.get(`/api/user/${username}`);
+      setProfileUser(response.data);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [username, profileUser]);
+
+  useEffect(() => {
+    fetchUserData();
+  }, [fetchUserData]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!profileUser) {
+    return <div>User not found</div>;
+  }
 
   return (
     <div className="profile">
       <div className="profile-header">
         <div
           className="cover-photo"
-          style={{ backgroundImage: `url(${user.coverPhoto})` }}
+          style={{ backgroundImage: `url(${profileUser.coverPhoto})` }}
         >
           <img
-            src={getAvatarSrc(user.username, user.avatar)}
-            alt={user.name}
+            src={getAvatarSrc(profileUser.username, profileUser.avatar)}
+            alt={profileUser.name}
             className="avatar"
           />
         </div>
         <div className="profile-info">
-          <h1>{user.name}</h1>
-          <p>{user.friendCount} friends</p>
-          <div className="profile-actions">
-            <button className="btn btn-primary">Add Friend</button>
-            <button className="btn btn-secondary">Message</button>
-          </div>
+          <h1>{profileUser.name}</h1>
+          <p>{profileUser.friendCount} friends</p>
+          {!isCurrentUser && (
+            <div className="profile-actions">
+              <button className="btn btn-primary">Add Friend</button>
+              <button className="btn btn-secondary">Message</button>
+            </div>
+          )}
         </div>
       </div>
       <div className="profile-content">
-        <div className="intro-section"></div>
+        <div className="intro-section">
+          <Intro user={profileUser} />
+        </div>
         <div className="timeline-section">
-          <ProfileTimeline />
+          <ProfileTimeline user={profileUser} />
         </div>
       </div>
     </div>

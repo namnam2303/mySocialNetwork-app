@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Form, Button, Alert } from "react-bootstrap";
 import { registerUser } from "../../actions/authAction";
-import "../../styles/Register.css";
+import "../../styles/Login/Register.css";
 import Logo from "../../assets/images/logo.png";
 
 const Register = () => {

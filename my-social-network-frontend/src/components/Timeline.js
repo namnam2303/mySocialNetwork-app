@@ -17,7 +17,7 @@ const Timeline = ({ user, timelineData, getTimeline, createComment }) => {
     if (user && user.username) {
       getTimeline(user.username);
     }
-  }, [user, getTimeline]);
+  }, []);
 
   const handleInputChange = (e) => {
     setNewPost(e.target.value);

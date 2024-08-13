@@ -7,14 +7,13 @@ import { getUserInfo, getTimeline } from "../actions/userAction";
 const Home = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
-  const auth = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (auth.isAuthenticated && user.sub) {
+    if (user.sub) {
       dispatch(getTimeline(user.sub));
       dispatch(getUserInfo(user.sub));
     }
-  }, [dispatch, auth.isAuthenticated, user.sub]);
+  }, [user.sub]);
 
   return (
     <div>

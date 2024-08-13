@@ -104,9 +104,9 @@ const App = () => {
           </ProtectedRoute>
         }
       >
-        <Route index element={<Timeline />} /> {/* Changed this line */}
+        <Route index element={<Timeline />} />
         <Route path="home" element={<Timeline />} />
-        <Route path="profile" element={<Profile />} />
+        <Route path="/profile/:username" element={<Profile />} />
         {/* Add other routes here */}
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />{" "}

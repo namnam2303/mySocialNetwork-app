@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { connect, useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import Post from "../post/Post";
@@ -6,6 +6,7 @@ import { createPost } from "../../actions/postAction";
 import { getPostOfUser, getTimeline } from "../../actions/userAction";
 import createComment from "../../actions/commentAction";
 import "../../styles/Profile/ProfileTimeline.css";
+import { getAvatarSrc } from "../../utils/utils";
 
 const ProfileTimeline = ({
   user,
@@ -18,11 +19,15 @@ const ProfileTimeline = ({
   const [previewUrl, setPreviewUrl] = useState(null);
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  const fetchUserPosts = useCallback(() => {
     if (user && user.username) {
       getPostOfUser(user.username);
     }
   }, [user, getPostOfUser]);
+
+  useEffect(() => {
+    fetchUserPosts();
+  }, [fetchUserPosts]);
 
   const handleInputChange = (e) => {
     setNewPost(e.target.value);
@@ -79,7 +84,7 @@ const ProfileTimeline = ({
     <div className="facebook-timeline">
       <div className="post-creator">
         <img
-          src={"/user/avatar/" + user.username}
+          src={getAvatarSrc(user.username, user.avatar)}
           alt={user.username}
           className="user-avatar"
         />
@@ -153,7 +158,6 @@ ProfileTimeline.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  user: state.user.userInfo,
   timelineData: state.user.userPosts || [],
 });
 

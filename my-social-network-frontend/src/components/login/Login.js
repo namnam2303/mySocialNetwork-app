@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
 import { loginUser } from "../../actions/authAction";
-import "../../styles/FacebookLogin.css";
+import "../../styles/Login/FacebookLogin.css";
 import Logo from "../../assets/images/logo.png";
 
 const Login = () => {
@@ -17,6 +17,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const errors = useSelector((state) => state.errors);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   useEffect(() => {
     if (showToast) {
@@ -34,7 +35,10 @@ const Login = () => {
       setMessageType("error");
       setShowToast(true);
     }
-  }, [errors]);
+    if (isAuthenticated) {
+      navigate("/home");
+    }
+  }, [errors, isAuthenticated, navigate]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();

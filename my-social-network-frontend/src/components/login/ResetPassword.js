@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { requestPasswordReset, resetPassword } from "../../actions/authAction";
-import "../../styles/ResetPassword.css";
+import "../../styles/Login/ResetPassword.css";
 
 const ResetPassword = () => {
   const [email, setEmail] = useState("");
