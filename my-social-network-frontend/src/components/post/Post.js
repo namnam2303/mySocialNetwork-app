@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import "../../styles/Post.css";
 import Comment from "../Comment";
 import createComment from "../../actions/commentAction";
@@ -7,6 +7,15 @@ import { createOrUpdateReaction } from "../../actions/reactionAction";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+
+const REACTION_ICONS = {
+  LIKE: "thumbs-up",
+  LOVE: "heart",
+  HAHA: "laugh",
+  SAD: "sad-tear",
+  ANGRY: "angry",
+};
+
 const Post = ({
   post,
   username,
@@ -22,16 +31,28 @@ const Post = ({
   const [newComment, setNewComment] = useState("");
   const [showAllComments, setShowAllComments] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
-  const [isDeleted, setIsDeleted] = useState(false);
   const [localPost, setLocalPost] = useState(post);
-  const [localReaction, setLocalReaction] = useState(post.reactions);
   const navigate = useNavigate();
 
   useEffect(() => {
     setLocalPost(post);
   }, [post]);
 
-  function timeAgo(dateString) {
+  const userReaction = useMemo(() => {
+    return (
+      localPost.reactions?.find((r) => r.username === username)?.reactionType ||
+      null
+    );
+  }, [localPost.reactions, username]);
+
+  const reactionCounts = useMemo(() => {
+    return localPost.reactions?.reduce((acc, reaction) => {
+      acc[reaction.reactionType] = (acc[reaction.reactionType] || 0) + 1;
+      return acc;
+    }, {});
+  }, [localPost.reactions]);
+
+  const timeAgo = useCallback((dateString) => {
     const now = new Date();
     const postDate = new Date(dateString);
     const diffInMs = now - postDate;
@@ -55,23 +76,21 @@ const Post = ({
     } else {
       return postDate.toLocaleDateString();
     }
-  }
+  }, []);
 
-  const handleCommentClick = () => {
-    setShowForm(!showForm);
-  };
+  const handleCommentClick = () => setShowForm(!showForm);
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
-    if (!newComment) {
-      return;
-    }
-    let commentObject = {
+    if (!newComment.trim()) return;
+
+    const commentObject = {
       content: newComment,
       isDeleted: false,
       user: { username: username },
       createdAt: new Date().toISOString(),
     };
+
     try {
       const createdComment = await createComment(
         localPost.publicId,
@@ -85,6 +104,7 @@ const Post = ({
         createdAt: createdComment?.createdAt || new Date().toISOString(),
         content: newComment,
       };
+
       setLocalPost((prevPost) => ({
         ...prevPost,
         comments: [...(prevPost.comments || []), commentWithId],
@@ -99,14 +119,11 @@ const Post = ({
     }
   };
 
-  const toggleComments = () => {
-    setShowAllComments(!showAllComments);
-  };
+  const toggleComments = () => setShowAllComments(!showAllComments);
 
   const handleDeletePost = async () => {
     try {
       await deletePost(localPost.publicId);
-      setIsDeleted(true);
       if (onPostDeleted) {
         onPostDeleted(localPost.publicId);
       }
@@ -115,22 +132,20 @@ const Post = ({
     }
   };
 
-  const toggleOptions = () => {
-    setShowOptions(!showOptions);
-  };
+  const toggleOptions = () => setShowOptions(!showOptions);
 
   const handleReaction = async (reactionType) => {
     try {
-      const reactionObject = {
-        reactionType: reactionType,
-      };
       const updatedPost = await createOrUpdateReaction(
         localPost.publicId,
         username,
-        reactionObject
+        { reactionType }
       );
+      updatedPost.user.fullName =
+        updatedPost.user.username === username
+          ? "You"
+          : updatedPost.user.fullName;
       setLocalPost(updatedPost);
-
       if (onReactionUpdated) {
         onReactionUpdated(localPost.publicId, updatedPost);
       }
@@ -139,41 +154,23 @@ const Post = ({
     }
   };
 
-  const getUserReaction = () => {
-    return (
-      localPost.reactions?.find((r) => r.user?.username === username)
-        ?.reactionType || null
-    );
-  };
-
-  const getReactionIcon = (type) => {
-    switch (type) {
-      case "LIKE":
-        return "thumbs-up";
-      case "LOVE":
-        return "heart";
-      case "HAHA":
-        return "laugh";
-      case "SAD":
-        return "sad-tear";
-      case "ANGRY":
-        return "angry";
-      default:
-        return "thumbs-up";
+  const displayedComments = useMemo(() => {
+    if (
+      !localPost.comments ||
+      localPost.comments.length <= 1 ||
+      showAllComments
+    ) {
+      return localPost.comments || [];
     }
-  };
+    return [localPost.comments[localPost.comments.length - 1]];
+  }, [localPost.comments, showAllComments]);
 
-  const displayedComments =
-    localPost.comments && localPost.comments.length > 1 && !showAllComments
-      ? [localPost.comments[localPost.comments.length - 1]]
-      : localPost.comments || [];
-
-  if (isDeleted) {
-    return null;
-  }
-  const handleUserClick = (username) => {
-    navigate(`/profile/${username}`);
-  };
+  const handleUserClick = useCallback(
+    (username) => {
+      navigate(`/profile/${username}`);
+    },
+    [navigate]
+  );
 
   return (
     <div className="post-card">
@@ -208,13 +205,9 @@ const Post = ({
       </div>
       {localPost.imageUrl && (
         <div className="post-image-wrapper">
-          <img
-            src={localPost.imageUrl ? localPost.imageUrl.substring(7) : ""}
-            alt="Post"
-          />
+          <img src={localPost.imageUrl.substring(7)} alt="Post" />
         </div>
       )}
-
       <div className="card-block">
         <div className="timeline-details">
           <p>{localPost.content}</p>
@@ -223,10 +216,10 @@ const Post = ({
       <div className="social-msg">
         <div className="like-container">
           <div className="like-options">
-            {["LIKE", "LOVE", "HAHA", "SAD", "ANGRY"].map((type) => (
+            {Object.entries(REACTION_ICONS).map(([type, icon]) => (
               <i
                 key={type}
-                className={`fa fa-${getReactionIcon(type)}`}
+                className={`fa fa-${icon}`}
                 title={type.charAt(0) + type.slice(1).toLowerCase()}
                 onClick={() => handleReaction(type)}
               ></i>
@@ -234,15 +227,15 @@ const Post = ({
           </div>
           <button className="like-main">
             <i
-              className={`fa fa-${getReactionIcon(
-                getUserReaction() || "LIKE"
-              )}`}
+              className={`fa fa-${REACTION_ICONS[userReaction || "LIKE"]}`}
             ></i>
-            {getUserReaction()
-              ? getUserReaction().charAt(0) +
-                getUserReaction().slice(1).toLowerCase()
+            {userReaction
+              ? userReaction.charAt(0) + userReaction.slice(1).toLowerCase()
               : "Like"}{" "}
-            ({localPost.reactions?.length || 0})
+            (
+            {Object.values(reactionCounts || {}).reduce((a, b) => a + b, 0) ||
+              0}
+            )
           </button>
         </div>
         <button className="comment-button" onClick={handleCommentClick}>

@@ -1,6 +1,7 @@
 import React from "react";
 import "../styles/Comment.css";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Comment = ({ comment }) => {
   const navigate = useNavigate();
@@ -8,6 +9,7 @@ const Comment = ({ comment }) => {
   const handleUserClick = () => {
     navigate(`/profile/${comment.user.username}`);
   };
+  const username = useSelector((state) => state.auth.user.sub);
 
   const getRelativeTime = (dateString) => {
     const date = new Date(dateString);
@@ -38,7 +40,7 @@ const Comment = ({ comment }) => {
         />
         <div className="comment-info">
           <span className="comment-author" onClick={handleUserClick}>
-            {comment.user.fullName}
+            {comment.user.username === username ? "You" : comment.user.fullName}
           </span>
           <p className="comment-content">{comment.content}</p>
         </div>
