@@ -82,7 +82,7 @@ const ProfileTimeline = ({
   };
 
   return (
-    <div className="facebook-timeline">
+    <div className="profile-timeline">
       <div className="post-creator">
         <img
           src={getAvatarSrc(user.username, user.avatar)}
@@ -136,7 +136,7 @@ const ProfileTimeline = ({
           }
           return (
             <Post
-              key={modifiedPost.id}
+              key={modifiedPost.publicId}
               post={modifiedPost}
               onPostDeleted={(deletedPostId) => {
                 getPostOfUser(user.username);

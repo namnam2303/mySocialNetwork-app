@@ -2,7 +2,7 @@
 
 .post-card {
   width: 100%;
-  max-width: 680px;
+  max-width: 760px;
   margin: 0 auto 16px;
   background-color: #ffffff;
   border-radius: 8px;
@@ -20,11 +20,13 @@
   align-items: center;
 }
 
-.chat-header {
-  font-size: 15px;
+.post-fullname {
+  font-size: 18px;
   font-weight: 600;
   color: #050505;
-  margin-right: 8px;
+  margin-right: 20px;
+  margin-left: 10px;
+  margin-bottom: 2px;
 }
 
 .social-time {
@@ -264,4 +266,12 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
+}
+
+
+.image-avatar{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
 }

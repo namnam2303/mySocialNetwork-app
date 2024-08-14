@@ -1,32 +1,47 @@
-.media {
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 20px;
-  }
-  
-  .media-left {
-    margin-right: 20px;
-  }
-  
-  .media-object {
-    border-radius: 50%;
-    width: 40px; /* Adjust size as needed */
-    height: 40px;
-  }
-  
-  .media-body {
-    flex: 1;
-    border-bottom: 1px solid #e9ecef;
-    padding-bottom: 10px;
-  }
-  
-  .chat-header {
-    font-weight: 600;
-    margin-bottom: 5px;
-    font-size: 1rem;
-  }
+.comment {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
 
-  .text-muted{
-    display: inline;
-    margin-left: 1rem;
-  }
+.comment-header {
+  display: flex;
+  align-items: flex-start;
+}
+.comment-avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  margin-right: 8px;
+  object-fit: cover;
+}
+
+.comment-info {
+  background-color: #f0f2f5;
+  border-radius: 18px;
+  padding: 8px 12px;
+  max-width: calc(100% - 40px);
+}
+
+.comment-author {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.comment-content {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+  line-height: 1.3333;
+}
+
+.comment-footer {
+  margin-top: 4px;
+  padding-left: 52px;
+}
+
+.comment-time {
+  font-size: 0.75rem;
+  color: #65676b;
+}

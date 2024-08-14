@@ -1,25 +1,52 @@
 import React from "react";
 import "../styles/Comment.css";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 const Comment = ({ comment }) => {
+  const navigate = useNavigate();
+
+  const handleUserClick = () => {
+    navigate(`/profile/${comment.user.username}`);
+  };
+
+  const getRelativeTime = (dateString) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInSeconds = Math.floor((now - date) / 1000);
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    const diffInDays = Math.floor(diffInHours / 24);
+    const diffInMonths = Math.floor(diffInDays / 30);
+    const diffInYears = Math.floor(diffInDays / 365);
+
+    if (diffInSeconds < 60) return `${diffInSeconds}s`;
+    if (diffInMinutes < 60) return `${diffInMinutes}m`;
+    if (diffInHours < 24) return `${diffInHours}h`;
+    if (diffInDays < 30) return `${diffInDays}d`;
+    if (diffInMonths < 12) return `${diffInMonths}m`;
+    return `${diffInYears}y`;
+  };
+
   return (
-    <div className="media m-b-20">
-      <Link to={`/profile/${comment.user.username}`} className="media-left">
+    <div className="comment">
+      <div className="comment-header">
         <img
-          className="media-object img-radius m-r-20"
+          className="comment-avatar"
           src={`/user/avatar/${comment.user.username}`}
           alt="User avatar"
+          onClick={handleUserClick}
         />
-      </Link>
-      <div className="media-body b-b-muted social-client-description">
-        <div className="chat-header">
-          {comment.user.fullName}
-          <span className="text-muted">
-            {" "}
-            {new Date(comment.createdAt).toLocaleDateString()}
+        <div className="comment-info">
+          <span className="comment-author" onClick={handleUserClick}>
+            {comment.user.fullName}
           </span>
+          <p className="comment-content">{comment.content}</p>
         </div>
-        <p className="text-coment">{comment.content}</p>
+      </div>
+      <div className="comment-footer">
+        <span className="comment-time">
+          {getRelativeTime(comment.createdAt)}
+        </span>
       </div>
     </div>
   );

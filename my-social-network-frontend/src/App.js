@@ -1,5 +1,5 @@
-import React from "react";
-import { Routes, Route, Navigate, Outlet, useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrentUser, logoutUser } from "./actions/authAction";
 import { jwtDecode } from "jwt-decode";
@@ -10,14 +10,14 @@ import Home from "./components/Home";
 import Timeline from "./components/Timeline";
 import Profile from "./components/profile/Profile";
 import ResetPassword from "./components/login/ResetPassword";
+import NotFound from "../src/components/NotFound";
 
-// Custom hook to check and manage authentication
-const useAuth = () => {
+const App = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const token = localStorage.getItem("jwtToken");
     if (token) {
       setAuthToken(token);
@@ -31,67 +31,65 @@ const useAuth = () => {
     }
   }, [dispatch, navigate]);
 
-  return isAuthenticated;
-};
-
-// Higher-order component for route protection
-const withRouteProtection = (Component, isProtected) => {
-  return function ProtectedComponent({ children }) {
-    const isAuth = useAuth();
-    const shouldRender = isProtected ? isAuth : !isAuth;
-    const redirectPath = isProtected ? "/login" : "/home";
-
-    if (shouldRender) {
-      return children ? children : <Component />;
-    } else {
-      return <Navigate to={redirectPath} replace />;
+  const ProtectedRoute = ({ children }) => {
+    if (!isAuthenticated) {
+      return <Navigate to="/login" replace />;
     }
+    return children;
   };
+
+  const PublicRoute = ({ children }) => {
+    if (isAuthenticated) {
+      return <Navigate to="/home" replace />;
+    }
+    return children;
+  };
+
+  return (
+    <Routes>
+      <Route
+        path="/login"
+        element={
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        }
+      />
+      <Route
+        path="/register"
+        element={
+          <PublicRoute>
+            <Register />
+          </PublicRoute>
+        }
+      />
+      <Route
+        path="/reset-password"
+        element={
+          <PublicRoute>
+            <ResetPassword />
+          </PublicRoute>
+        }
+      />
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<Navigate to="/home" replace />} />
+        <Route path="home" element={<Timeline />} />
+        <Route path="profile/:username" element={<Profile />} />
+        <Route path="friends" element={<div>Friends Page</div>} />
+        <Route path="notifications" element={<div>Notifications Page</div>} />
+        <Route path="messages" element={<div>Messages Page</div>} />
+      </Route>
+      <Route path="/not-found" element={<NotFound />} />
+      <Route path="*" element={<Navigate to="/not-found" replace />} />
+    </Routes>
+  );
 };
-
-const ProtectedRoute = withRouteProtection(Outlet, true);
-const PublicRoute = withRouteProtection(Outlet, false);
-
-const App = () => (
-  <Routes>
-    <Route
-      path="/login"
-      element={
-        <PublicRoute>
-          <Login />
-        </PublicRoute>
-      }
-    />
-    <Route
-      path="/register"
-      element={
-        <PublicRoute>
-          <Register />
-        </PublicRoute>
-      }
-    />
-    <Route
-      path="/reset-password"
-      element={
-        <PublicRoute>
-          <ResetPassword />
-        </PublicRoute>
-      }
-    />
-    <Route
-      path="/"
-      element={
-        <ProtectedRoute>
-          <Home />
-        </ProtectedRoute>
-      }
-    >
-      <Route index element={<Timeline />} />
-      <Route path="home" element={<Timeline />} />
-      <Route path="profile/:username" element={<Profile />} />
-    </Route>
-    <Route path="*" element={<Navigate to="/" replace />} />
-  </Routes>
-);
 
 export default App;

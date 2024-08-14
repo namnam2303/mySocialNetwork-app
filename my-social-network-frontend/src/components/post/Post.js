@@ -6,8 +6,7 @@ import { deletePost } from "../../actions/postAction";
 import { createOrUpdateReaction } from "../../actions/reactionAction";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 const Post = ({
   post,
   username,
@@ -25,6 +24,8 @@ const Post = ({
   const [showOptions, setShowOptions] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
   const [localPost, setLocalPost] = useState(post);
+  const [localReaction, setLocalReaction] = useState(post.reactions);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLocalPost(post);
@@ -128,7 +129,6 @@ const Post = ({
         username,
         reactionObject
       );
-
       setLocalPost(updatedPost);
 
       if (onReactionUpdated) {
@@ -171,24 +171,26 @@ const Post = ({
   if (isDeleted) {
     return null;
   }
+  const handleUserClick = (username) => {
+    navigate(`/profile/${username}`);
+  };
 
   return (
     <div className="post-card">
       <div className="card-block post-timelines">
         <div className="post-header">
-          <div className="image-container">
-            <Link
-              to={`/profile/${localPost.user?.username}`}
-              className="media-left"
-            >
-              <img
-                className="media-object"
-                src={`/user/avatar/${localPost.user?.username}`}
-                alt="User avatar"
-              />
-            </Link>
+          <div
+            className="image-container"
+            onClick={() => handleUserClick(localPost.user?.username)}
+            style={{ cursor: "pointer" }}
+          >
+            <img
+              className="image-avatar"
+              src={`/user/avatar/${localPost.user?.username}`}
+              alt="User avatar"
+            />
           </div>
-          <div className="chat-header">{localPost.user?.fullName}</div>
+          <div className="post-fullname">{localPost.user?.fullName}</div>
           <div className="social-time">{timeAgo(localPost.createdAt)}</div>
         </div>
         {username === localPost.user?.username && (

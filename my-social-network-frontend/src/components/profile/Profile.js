@@ -1,51 +1,57 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useParams, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import Intro from "./Intro";
-import "../../styles/Profile/Profile.css";
 import ProfileTimeline from "./ProfileTimeline";
+import ListFriend from "./ListFriend";
+import "../../styles/Profile/Profile.css";
 import { getAvatarSrc } from "../../utils/utils";
 import setAuthToken from "../../utils/setAuthToken";
 import axios from "axios";
 import { getListFriend } from "../../actions/friendAction";
 import { connect } from "react-redux";
-import Proptyes from "prop-types";
-import { useDispatch } from "react-redux";
+import PropTypes from "prop-types";
 
-const Profile = () => {
+const Profile = ({ getListFriend }) => {
   const { username } = useParams();
   const [profileUser, setProfileUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const currentUser = useSelector((state) => state.user.userInfo);
   const isCurrentUser = currentUser.username === username;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const friendList = useSelector((state) => state.friend);
-  const fetchUserData = useCallback(async () => {
-    if (!username || profileUser) return;
 
+  const fetchUserData = useCallback(async () => {
     setLoading(true);
+    setError(null);
     try {
       console.log(`Fetching user data for ${username}`);
       if (localStorage.jwtToken) {
         setAuthToken(localStorage.jwtToken);
       }
       const response = await axios.get(`/api/user/${username}`);
-
       setProfileUser(response.data);
     } catch (error) {
       console.error("Error fetching user data:", error);
+      setError("User not found");
     } finally {
       setLoading(false);
     }
-  }, [username, profileUser]);
+  }, [username, dispatch]);
 
   useEffect(() => {
     fetchUserData();
-    dispatch(getListFriend(username));
-  }, [username, fetchUserData, dispatch]);
+    getListFriend(username);
+  }, [username, fetchUserData, getListFriend]);
 
   if (loading) {
     return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
   }
 
   if (!profileUser) {
@@ -61,15 +67,12 @@ const Profile = () => {
         >
           <img
             src={getAvatarSrc(profileUser.username, profileUser.avatar)}
-            alt={profileUser.name}
+            alt={profileUser.fullName}
             className="avatar"
           />
         </div>
         <div className="profile-info">
-          <h1>{profileUser.name}</h1>
-          <p className="friend-span">
-            {friendList.length || 0} friend {friendList.length > 1 ? `s` : ``}
-          </p>
+          <h1>{profileUser.fullName}</h1>
           {!isCurrentUser && (
             <div className="profile-actions">
               <button className="btn btn-primary">Add Friend</button>
@@ -79,10 +82,11 @@ const Profile = () => {
         </div>
       </div>
       <div className="profile-content">
-        <div className="intro-section">
+        <div className="left-column">
           <Intro user={profileUser} />
+          <ListFriend friends={friendList} />
         </div>
-        <div className="timeline-section">
+        <div className="right-column">
           <ProfileTimeline user={profileUser} />
         </div>
       </div>
@@ -91,7 +95,7 @@ const Profile = () => {
 };
 
 Profile.propTypes = {
-  getListFriend: Proptyes.func.isRequired,
+  getListFriend: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = {

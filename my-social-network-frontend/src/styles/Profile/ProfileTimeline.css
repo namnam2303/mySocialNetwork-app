@@ -1,12 +1,12 @@
-/* styles/FacebookTimeline.css */
 
-.facebook-timeline {
-    max-width: 680px;
-    margin: 0 auto;
+.profile-timeline {
+    margin: 0 0;
     padding: 20px;
     background-color: #f0f2f5;
     font-family: Helvetica, Arial, sans-serif;
-    margin-top: 2.5rem; /* Thêm margin-top để tạo khoảng cách với Header */
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding-top: 20px;
   }
   
   .post-creator {

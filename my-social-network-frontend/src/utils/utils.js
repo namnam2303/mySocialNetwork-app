@@ -1,6 +1,6 @@
 import defaultAvatar from "../assets/images/default.png";
 export const getAvatarSrc = (username, avatar) => {
-  if (!username || avatar === undefined) {
+  if (!username || !avatar) {
     return defaultAvatar;
   }
   return "/user/avatar/" + username;
