@@ -1,0 +1,105 @@
+.messenger {
+    position: fixed;
+    bottom: 0;
+    right: 20px;
+    width: 300px;
+    background-color: #fff;
+    border: 1px solid #dddfe2;
+    border-radius: 8px 8px 0 0;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+  
+  .messenger-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: #0084ff;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 8px 8px 0 0;
+  }
+  
+  .messenger-header h3 {
+    margin: 0;
+    font-size: 16px;
+  }
+  
+  .toggle-icon {
+    font-size: 12px;
+    transition: transform 0.3s ease;
+  }
+  
+  .toggle-icon.open {
+    transform: rotate(180deg);
+  }
+  
+  .messenger-content {
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .message-list {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 10px;
+  }
+  
+  .message {
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    border-radius: 18px;
+    max-width: 80%;
+  }
+  
+  .message.received {
+    background-color: #f1f0f0;
+    align-self: flex-start;
+  }
+  
+  .message.sent {
+    background-color: #0084ff;
+    color: #fff;
+    align-self: flex-end;
+  }
+  
+  .message strong {
+    font-weight: bold;
+  }
+  
+  .message small {
+    display: block;
+    font-size: 10px;
+    margin-top: 5px;
+    opacity: 0.7;
+  }
+  
+  .message-input {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #dddfe2;
+  }
+  
+  .message-input input {
+    flex-grow: 1;
+    border: none;
+    padding: 8px;
+    border-radius: 20px;
+    background-color: #f1f0f0;
+  }
+  
+  .message-input button {
+    margin-left: 10px;
+    padding: 8px 15px;
+    background-color: #0084ff;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  
+  .message-input button:hover {
+    background-color: #0077e5;
+  }

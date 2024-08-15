@@ -83,50 +83,51 @@ const ProfileTimeline = ({
 
   return (
     <div className="profile-timeline">
-      <div className="post-creator">
-        <img
-          src={getAvatarSrc(user.username, user.avatar)}
-          alt={user.username}
-          className="user-avatar"
-        />
-        <form onSubmit={handlePostSubmit}>
-          <textarea
-            placeholder="Bạn đang nghĩ gì?"
-            value={newPost}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            rows="1"
+      {currentLoginUser.username === user.username ? (
+        <div className="post-creator">
+          <img
+            src={getAvatarSrc(user.username, user.avatar)}
+            alt={user.username}
+            className="user-avatar"
           />
-          <div className="post-actions">
-            <input
-              type="file"
-              id="image-upload"
-              accept="image/*"
-              onChange={handleImageChange}
-              style={{ display: "none" }}
+          <form onSubmit={handlePostSubmit}>
+            <textarea
+              placeholder="Bạn đang nghĩ gì?"
+              value={newPost}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              rows="1"
             />
-            <label htmlFor="image-upload" className="image-upload-label">
-              <i className="fas fa-image"></i>
-            </label>
-            <button type="submit">Đăng</button>
-          </div>
-          {previewUrl && (
-            <div className="image-preview">
-              <img src={previewUrl} alt="Preview" />
-              <button
-                type="button"
-                onClick={() => {
-                  setImage(null);
-                  setPreviewUrl(null);
-                }}
-              >
-                Xóa ảnh
-              </button>
+            <div className="post-actions">
+              <input
+                type="file"
+                id="image-upload"
+                accept="image/*"
+                onChange={handleImageChange}
+                style={{ display: "none" }}
+              />
+              <label htmlFor="image-upload" className="image-upload-label">
+                <i className="fas fa-image"></i>
+              </label>
+              <button type="submit">Đăng</button>
             </div>
-          )}
-        </form>
-      </div>
-
+            {previewUrl && (
+              <div className="image-preview">
+                <img src={previewUrl} alt="Preview" />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setImage(null);
+                    setPreviewUrl(null);
+                  }}
+                >
+                  Xóa ảnh
+                </button>
+              </div>
+            )}
+          </form>
+        </div>
+      ) : null}
       {timelineData && timelineData.length > 0 ? (
         timelineData.map((post) => {
           // Create a copy of the post and modify if necessary

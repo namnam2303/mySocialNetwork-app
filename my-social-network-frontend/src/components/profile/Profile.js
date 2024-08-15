@@ -66,7 +66,7 @@ const Profile = ({ getListFriend }) => {
           style={{ backgroundImage: `url(${profileUser.coverPhoto})` }}
         >
           <img
-            src={getAvatarSrc(profileUser.username, profileUser.avatar)}
+            src={`/user/avatar/${profileUser.username}`}
             alt={profileUser.fullName}
             className="avatar"
           />
