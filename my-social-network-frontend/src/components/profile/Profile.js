@@ -8,7 +8,7 @@ import "../../styles/Profile/Profile.css";
 import { getAvatarSrc } from "../../utils/utils";
 import setAuthToken from "../../utils/setAuthToken";
 import axios from "axios";
-import { getListFriend } from "../../actions/friendAction";
+import { getListFriend, getListFriendOfUser } from "../../actions/friendAction";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
@@ -21,7 +21,6 @@ const Profile = ({ getListFriend }) => {
   const isCurrentUser = currentUser.username === username;
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const friendList = useSelector((state) => state.friend);
 
   const fetchUserData = useCallback(async () => {
     setLoading(true);
@@ -33,19 +32,21 @@ const Profile = ({ getListFriend }) => {
       }
       const response = await axios.get(`/api/user/${username}`);
       setProfileUser(response.data);
+      dispatch(getListFriendOfUser(username));
     } catch (error) {
       console.error("Error fetching user data:", error);
       setError("User not found");
     } finally {
       setLoading(false);
     }
-  }, [username, dispatch]);
+  }, [username, dispatch, getListFriend]);
 
   useEffect(() => {
     fetchUserData();
-    getListFriend(username);
   }, [username, fetchUserData, getListFriend]);
-
+  const friendList = useSelector((state) =>
+    isCurrentUser ? state.friend.friendList : state.friend.profileFriendList
+  );
   if (loading) {
     return <div>Loading...</div>;
   }

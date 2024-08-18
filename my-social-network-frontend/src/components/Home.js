@@ -5,81 +5,20 @@ import FriendsList from "./OnlineFriendList";
 import { useSelector, useDispatch } from "react-redux";
 import { getUserInfo, getTimeline } from "../actions/userAction";
 import Messenger from "./Message";
+import { getListFriend } from "../actions/friendAction";
 import "../styles/Home.css";
 
 const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
-
-  // Fake friends data
-  const friends = [
-    {
-      username: "john_doe",
-      fullName: "John Doe",
-      isOnline: true,
-      avatar: "toan",
-    },
-    {
-      username: "jane_smith",
-      fullName: "Jane Smith",
-      isOnline: false,
-      avatar: "toan",
-    },
-    {
-      username: "mike_johnson",
-      fullName: "Mike Johnson",
-      isOnline: true,
-      avatar: "toan",
-    },
-    {
-      username: "emily_brown",
-      fullName: "Emily Brown",
-      isOnline: true,
-      avatar: "toan",
-    },
-    {
-      username: "david_wilson",
-      fullName: "David Wilson",
-      isOnline: false,
-      avatar: "toan",
-    },
-    {
-      username: "sarah_lee",
-      fullName: "Sarah Lee",
-      isOnline: true,
-      avatar: "toan",
-    },
-    {
-      username: "chris_taylor",
-      fullName: "Chris Taylor",
-      isOnline: false,
-      avatar: "toan",
-    },
-    {
-      username: "lisa_anderson",
-      fullName: "Lisa Anderson",
-      isOnline: true,
-      avatar: "toan",
-    },
-    {
-      username: "robert_martinez",
-      fullName: "Robert Martinez",
-      isOnline: false,
-      avatar: "toan",
-    },
-    {
-      username: "jessica_white",
-      fullName: "Jessica White",
-      isOnline: true,
-      avatar: "toan",
-    },
-  ];
+  const friendList = useSelector((state) => state.friend.friendList);
 
   useEffect(() => {
     if (user.sub) {
       dispatch(getTimeline(user.sub));
       dispatch(getUserInfo(user.sub));
+      dispatch(getListFriend(user.sub));
     } else {
       navigate("/login");
     }
@@ -93,7 +32,7 @@ const Home = () => {
           <Outlet />
         </main>
         <aside className="friends-sidebar">
-          <FriendsList friends={friends} />
+          <FriendsList friends={friendList} />
         </aside>
       </div>
       <Messenger />

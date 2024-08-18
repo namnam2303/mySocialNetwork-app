@@ -10,14 +10,12 @@ const Login = () => {
   const [inputUsername, setInputUsername] = useState("");
   const [inputPassword, setInputPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState("");
   const [showToast, setShowToast] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const errors = useSelector((state) => state.errors);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const error = useSelector((state) => state.errors.error);
 
   useEffect(() => {
     if (showToast) {
@@ -29,16 +27,16 @@ const Login = () => {
   }, [showToast]);
 
   useEffect(() => {
-    if (errors && errors.message) {
-      console.log("Error received:", errors.message);
-      setMessage(errors.message);
-      setMessageType("error");
-      setShowToast(true);
-    }
     if (isAuthenticated) {
       navigate("/home");
     }
-  }, [errors, isAuthenticated, navigate]);
+  }, [isAuthenticated, navigate]);
+
+  useEffect(() => {
+    if (error) {
+      setShowToast(true);
+    }
+  }, [error]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -52,11 +50,8 @@ const Login = () => {
 
     try {
       await dispatch(loginUser(userData, navigate));
-      // If login is successful, getUserInfo will be called and user will be redirected
     } catch (error) {
       console.error("Login failed:", error);
-      setShowToast(true);
-      // Error handling is managed by the useEffect hook watching the errors state
     } finally {
       setLoading(false);
     }
@@ -74,10 +69,8 @@ const Login = () => {
         </div>
         <div className="facebook-login__right">
           <Form className="facebook-login__form" onSubmit={handleSubmit}>
-            {showToast && (
-              <div className={`toast-notification ${messageType}`}>
-                {message}
-              </div>
+            {showToast && error && (
+              <div className="toast-notification error">{error}</div>
             )}
             <Form.Control
               type="text"
@@ -119,7 +112,7 @@ const Login = () => {
           </Form>
           <p className="facebook-login__create-page">
             <strong>Tạo Trang</strong> dành cho người nổi tiếng, thương hiệu
-            hoặc doanng nghiệp.
+            hoặc doanh nghiệp.
           </p>
         </div>
       </div>

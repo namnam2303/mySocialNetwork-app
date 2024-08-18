@@ -9,16 +9,19 @@ const ListFriend = ({ friends }) => {
   const handleFriendClick = (username) => {
     navigate(`/profile/${username}`);
   };
+  const friendList = Array.from(new Set(friends.map((f) => f.username))).map(
+    (username) => friends.find((f) => f.username === username)
+  );
 
   return (
     <div className="friends-list-container">
       <h2>Friends</h2>
       <p className="friend-span">
-        {friends.length || 0} friend{friends.length !== 1 ? "s" : ""}
+        {friendList.length || 0} friend{friends.length !== 1 ? "s" : ""}
       </p>
       <div className="friends-grid">
-        {friends.map((friend) => (
-          <div key={friend.username} className="friend-item">
+        {friendList.map((friend) => (
+          <div key={friend.publicId} className="friend-item">
             <div
               onClick={() => handleFriendClick(friend.username)}
               style={{ cursor: "pointer" }}
