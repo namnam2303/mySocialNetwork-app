@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { connect, useDispatch } from "react-redux";
 import PropTypes from "prop-types";
-import Post from "./post/Post";
-import { getTimeline } from "../actions/userAction";
-import createComment from "../actions/commentAction";
-import { createPost } from "../actions/postAction";
-import "../styles/FacebookTimeline.css";
+import Post from "../post/Post";
+import { getTimeline } from "../../actions/userAction";
+import createComment from "../../actions/commentAction";
+import { createPost } from "../../actions/postAction";
+import "../../styles/FacebookTimeline.css";
 
 const Timeline = ({ user, timelineData, getTimeline, createComment }) => {
   const [newPost, setNewPost] = useState("");

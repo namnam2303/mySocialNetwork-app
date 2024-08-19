@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/FriendList.css";
+import "../../styles/FriendList.css";
 
 const FriendsList = ({ friends }) => {
   // Kiểm tra xem friends có phải là một mảng và có phần tử không

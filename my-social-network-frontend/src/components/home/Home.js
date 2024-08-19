@@ -1,13 +1,12 @@
 import React, { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import Header from "./layout/Header";
+import Header from "../layout/Header";
 import FriendsList from "./OnlineFriendList";
 import { useSelector, useDispatch } from "react-redux";
-import { getUserInfo, getTimeline } from "../actions/userAction";
-import Messenger from "./Message";
-import { getListFriend } from "../actions/friendAction";
-import "../styles/Home.css";
-
+import { getUserInfo, getTimeline } from "../../actions/userAction";
+import Messenger from "../Message";
+import { getListFriend } from "../../actions/friendAction";
+import "../../styles/Home.css";
 const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();

@@ -42,7 +42,6 @@ const Messenger = () => {
     <div className={`messenger ${isOpen ? "open" : ""}`}>
       <div className="messenger-header" onClick={toggleMessenger}>
         <h3>Messenger</h3>
-        <span className={`toggle-icon ${isOpen ? "open" : ""}`}>▲</span>
       </div>
       {isOpen && (
         <div className="messenger-content">

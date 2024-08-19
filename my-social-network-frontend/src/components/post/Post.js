@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import "../../styles/Post.css";
-import Comment from "../Comment";
+import Comment from "./Comment";
 import createComment from "../../actions/commentAction";
 import { deletePost } from "../../actions/postAction";
 import { createOrUpdateReaction } from "../../actions/reactionAction";
