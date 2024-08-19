@@ -46,3 +46,70 @@ export const getListFriendOfUser = (username) => async (dispatch) => {
     });
   }
 };
+export const sendFriendRequest =
+  (username, friendUsername) => async (dispatch) => {
+    try {
+      if (localStorage.jwtToken) {
+        setAuthToken(localStorage.jwtToken);
+      }
+      await axios.post(`/api/friend/${username}/${friendUsername}`);
+      // After sending request, update friend list
+      dispatch(getListFriend(username));
+    } catch (error) {
+      handleError(error, dispatch);
+    }
+  };
+
+export const acceptFriendRequest =
+  (username, friendUsername) => async (dispatch) => {
+    try {
+      if (localStorage.jwtToken) {
+        setAuthToken(localStorage.jwtToken);
+      }
+      await axios.put(`/api/friend/accept/${friendUsername}`, { username });
+      // After accepting request, update friend list
+      dispatch(getListFriend(username));
+    } catch (error) {
+      handleError(error, dispatch);
+    }
+  };
+
+// Reject friend request
+export const rejectFriendRequest =
+  (username, friendUsername) => async (dispatch) => {
+    try {
+      if (localStorage.jwtToken) {
+        setAuthToken(localStorage.jwtToken);
+      }
+      await axios.put(`/api/friend/reject/${friendUsername}`, { username });
+      // After rejecting request, update friend list
+      dispatch(getListFriend(username));
+    } catch (error) {
+      handleError(error, dispatch);
+    }
+  };
+
+// Unfriend
+export const unfriend = (username, friendUsername) => async (dispatch) => {
+  try {
+    if (localStorage.jwtToken) {
+      setAuthToken(localStorage.jwtToken);
+    }
+    await axios.delete(`/api/friend/${username}/${friendUsername}`);
+    // After unfriending, update friend list
+    dispatch(getListFriend(username));
+  } catch (error) {
+    handleError(error, dispatch);
+  }
+};
+
+const handleError = (error, dispatch) => {
+  const errors =
+    error.response && error.response.data
+      ? error.response.data
+      : { message: "An unknown error occurred" };
+  dispatch({
+    type: GET_ERRORS,
+    payload: errors,
+  });
+};

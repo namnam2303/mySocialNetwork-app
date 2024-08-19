@@ -11,6 +11,7 @@ import Timeline from "./components/home/Timeline";
 import Profile from "./components/profile/Profile";
 import ResetPassword from "./components/login/ResetPassword";
 import NotFound from "../src/components/NotFound";
+import FriendList from "./components/friend/Friend";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -82,7 +83,7 @@ const App = () => {
         <Route index element={<Navigate to="/home" replace />} />
         <Route path="home" element={<Timeline />} />
         <Route path="profile/:username" element={<Profile />} />
-        <Route path="friends" element={<div>Friends Page</div>} />
+        <Route path="friends" element={<FriendList />} />
         <Route path="notifications" element={<div>Notifications Page</div>} />
         <Route path="messages" element={<div>Messages Page</div>} />
       </Route>
